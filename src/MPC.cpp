@@ -6,7 +6,7 @@
 using CppAD::AD;
 
 // Number of timesteps in the horizon. 
-size_t N = 15;
+size_t N = 10;
 
 // Elapsed time between actuations
 double dt = 0.1;
