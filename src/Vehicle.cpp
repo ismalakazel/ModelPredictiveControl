@@ -41,7 +41,7 @@ void Vehicle::move(double cte, double epsi) {
     y = 0.0;
     orientation = speed * -steering / Lf * dt;
     speed += throttle * dt;
-
+    
     // Predict control variables
     this->cte = cte + speed * sin(epsi) * dt;
     this->epsi = epsi + speed * -steering / Lf * dt;        
@@ -50,8 +50,8 @@ void Vehicle::move(double cte, double epsi) {
 
 tuple<vector<double>, vector<double>> Vehicle::build_route(VectorXd coefficients) {
     vector<double> mpc_route = mpc.Solve(this->state(), coefficients); 
-    this->cte = mpc_route[0] / (deg2rad(25) * Lf);
-    this->epsi = mpc_route[1];
+    this->steering = mpc_route[0] / (deg2rad(25) * Lf);
+    this->throttle = mpc_route[1];
 
     vector<double> mpc_x_vals = {x};
     vector<double> mpc_y_vals = {y};
@@ -82,8 +82,8 @@ tuple<vector<double>, vector<double>> Vehicle::build_trajectory(Eigen::VectorXd 
 
 
 VectorXd Vehicle::state() {
-    VectorXd state(6);
-    state << x, y, orientation, speed, cte, epsi;
+    VectorXd state(8);
+    state << x, y, orientation, speed, steering, throttle, cte, epsi;
     return state;
 };
 
