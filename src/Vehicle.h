@@ -32,6 +32,12 @@ class Vehicle {
         /// The vehicle's throttle
         double throttle;
 
+        /// The cross track error
+        double cte;
+
+        /// The orientation error
+        double epsi;
+
         /**!
           Converts global location (x, y) coordinates to vehicle (x, y) coordinates
           @param xp   A set of x coordinate points

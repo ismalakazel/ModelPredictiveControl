@@ -89,8 +89,8 @@ int main() {
  
           json msgJson;
           
-          msgJson["steering_angle"] = vehicle.steering;
-          msgJson["throttle"] = vehicle.throttle;
+          msgJson["steering_angle"] = vehicle.cte;
+          msgJson["throttle"] = vehicle.epsi;
     
           msgJson["mpc_x"] = get<0>(route);
           msgJson["mpc_y"] = get<1>(route);
