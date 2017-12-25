@@ -62,5 +62,6 @@ After fitting the coordinates the state of the `Vehicle` and its actuators ared 
 
 This implementation uses a delay time of 0.1 to compensate for the 100ms latency in the simulator. A bigger number causes the vehicle to zig-zag, while a smaller number doesn't have any meaningfull effect in terms of sensing the vehicle state.
 
+## Preview
 
-
+[Preview](https://www.youtube.com/watch?v=iZRxPHhc5eg)
