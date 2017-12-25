@@ -81,12 +81,12 @@ int main() {
           // Predict next vehicle state 
           vehicle.move(cte, epsi);
 
-          /// Build route (green lline)
+          /// Build reference trajectory (yellow line)
+          auto trajectory = vehicle.build_trajectory(coefficients, 100, 2);
+
+          /// Build computed trajectory (green lline)
           auto route = vehicle.build_route(coefficients);
-
-          /// Build trajectory (yellow line)
-          auto trajectory = vehicle.build_trajectory(coefficients, 20, 3);
-
+ 
           json msgJson;
           
           msgJson["steering_angle"] = vehicle.steering;

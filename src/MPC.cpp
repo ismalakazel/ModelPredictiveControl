@@ -5,8 +5,11 @@
 
 using CppAD::AD;
 
-size_t N = 20;
-double dt = 0.05;
+// Number of timesteps in the horizon. 
+size_t N = 15;
+
+// Elapsed time between actuations
+double dt = 0.1;
 
 const double Lf = 2.67;
 const double ref_v = 100;
@@ -34,30 +37,30 @@ class FG_eval {
 
             // The part of the cost based on the reference state.
             for( int i = 0; i < N; i++ ) {
-                fg[0] += 3000 * CppAD::pow(vars[cte_start + i], 2);
-                fg[0] += 3000 * CppAD::pow(vars[epsi_start + i], 2);
+                fg[0] += 1500 * CppAD::pow(vars[cte_start + i], 2);
+                fg[0] += 1500 * CppAD::pow(vars[epsi_start + i], 2);
                 fg[0] += CppAD::pow(vars[v_start + i] - ref_v, 2);
             }
 
             // Minimize the use of actuators.
             for (int i = 0; i < N - 1; i++) {
-                fg[0] += 50 * CppAD::pow(vars[delta_start + i], 2);
+                fg[0] += CppAD::pow(vars[delta_start + i], 2);
                 fg[0] += 100 * CppAD::pow(vars[a_start + i], 2);
             }
 
             // Minimize the value gap between sequential actuations.
             for (int i = 0; i < N - 2; i++) {
-                fg[0] += 25000 * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-                fg[0] += 5000 * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+                fg[0] += CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+                fg[0] += CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
             }
 
             // Initial constraints.
-            fg[1 + x_start] = vars[x_start];
-            fg[1 + y_start] = vars[y_start];
-            fg[1 + psi_start] = vars[psi_start];
-            fg[1 + v_start] = vars[v_start];
-            fg[1 + cte_start] = vars[cte_start];
-            fg[1 + epsi_start] = vars[epsi_start];
+            fg[x_start + 1] = vars[x_start];
+            fg[y_start + 1] = vars[y_start];
+            fg[psi_start + 1] = vars[psi_start];
+            fg[v_start + 1] = vars[v_start];
+            fg[cte_start + 1] = vars[cte_start];
+            fg[epsi_start + 1] = vars[epsi_start];
 
             for (int t = 1; t < N; t++) {
                 
@@ -74,7 +77,6 @@ class FG_eval {
                 AD<double> a = vars[a_start + t - 1];
                 AD<double> f = coeffs[0] + coeffs[1] * x + coeffs[2] * CppAD::pow(x, 2) + coeffs[3] * CppAD::pow(x, 3);
                 AD<double> psides = CppAD::atan(coeffs[1] + 2 * coeffs[2] * x + 3 * coeffs[3] * CppAD::pow(x, 2));
-
 
                 // State at time T+1
                 AD<double> xt = vars[x_start + t];
